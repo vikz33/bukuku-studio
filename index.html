@@ -1,0 +1,454 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Bukuku - Book Studio</title>
+  <link rel="icon" href="data:image/svg+xml,<svg xmlns=%22http://www.w3.org/2000/svg%22 viewBox=%220 0 100 100%22><text y=%22.9em%22 font-size=%2290%22>📓</text></svg>">
+  
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/html2canvas/1.4.1/html2canvas.min.js"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js"></script>
+  <link rel="stylesheet" href="style.css">
+</head>
+<body>
+  <div id="app">
+    <div class="shell">
+      
+      <div id="emojiPicker" class="emoji-picker-modal hidden"></div>
+      <input type="file" id="btnUploadDraft" accept=".json" style="display:none;">
+
+      <div class="home-page" id="homePage">
+        <div class="animated-bg"></div>
+        <div class="floating-ornaments">
+          <span class="ornament o-1">🌸</span>
+          <span class="ornament o-2">✨</span>
+          <span class="ornament o-3">📓</span>
+          <span class="ornament o-4">🌿</span>
+        </div>
+
+        <button id="heroDarkModeBtn" class="hero-dark-btn" title="Ganti Mode">
+            <svg class="icon-moon" viewBox="0 0 24 24"><path d="M21 12.79A9 9 0 1 1 11.21 3 7 7 0 0 0 21 12.79z"></path></svg>
+            <svg class="icon-sun" viewBox="0 0 24 24"><circle cx="12" cy="12" r="5"></circle><line x1="12" y1="1" x2="12" y2="3"></line><line x1="12" y1="21" x2="12" y2="23"></line><line x1="4.22" y1="4.22" x2="5.64" y2="5.64"></line><line x1="18.36" y1="18.36" x2="19.78" y2="19.78"></line><line x1="1" y1="12" x2="3" y2="12"></line><line x1="21" y1="12" x2="23" y2="12"></line><line x1="4.22" y1="19.78" x2="5.64" y2="18.36"></line><line x1="18.36" y1="5.64" x2="19.78" y2="4.22"></line></svg>
+        </button>
+
+        <section class="hero-split">
+          <div class="hero-left">
+            <div class="eyebrow">✨ BUKUKU STUDIO</div>
+            <h2>Desain buku catatan estetik, rapi, & anti tertukar.</h2>
+            <p>Pilih tema, sesuaikan format isi, tambah stiker lucu, dan siapkan dokumen siap cetak untuk A4 atau KDP. Gratis dan tanpa ribet.</p>
+            <div class="hero-actions">
+              <button class="btn-start" id="startEditorBtn" type="button">🚀 Buka Editor</button>
+              <button class="ghost-chip" onclick="document.getElementById('btnUploadDraft').click()" type="button">
+                  <svg viewBox="0 0 24 24"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"></path><polyline points="17 8 12 3 7 8"></polyline><line x1="12" y1="3" x2="12" y2="15"></line></svg>
+                  Lanjut Edit (Draft)
+              </button>
+            </div>
+          </div>
+          
+          <div class="hero-right">
+            <div class="mockup-container">
+              <div class="mockup-card card-3">
+                <div class="mockup-content" style="background: linear-gradient(135deg, #0b1029, #312e81);">
+                  <div class="m-deco">🚀</div>
+                  <div class="m-title" style="color: #fff;">Space Log</div>
+                </div>
+              </div>
+              <div class="mockup-card card-1">
+                <div class="mockup-content" style="background: linear-gradient(135deg, #FFEDEB, #F5F2ED);">
+                  <div class="m-deco">🌸</div>
+                  <div class="m-title" style="color: #D68C73;">Lovely Note</div>
+                </div>
+              </div>
+              <div class="mockup-card card-2">
+                <div class="mockup-content" style="background: linear-gradient(135deg, #1B4332, #2D5A47);">
+                  <div class="m-deco">🌿</div>
+                  <div class="m-title" style="color: #fff;">Jurnal Hijau</div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </section>
+      </div>
+
+      <div class="editor-page" id="editorPage">
+        
+        <header class="top-bar no-print">
+          <div class="tb-left">
+            <button id="goHomeBtn" class="btn-icon" title="Ke Beranda">
+                <svg viewBox="0 0 24 24" stroke="currentColor" fill="none" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="M3 9l9-7 9 7v11a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z"></path><polyline points="9 22 9 12 15 12 15 22"></polyline></svg>
+            </button>
+            <div class="tb-title">
+              <h1>📓 Bukuku Studio</h1>
+              <span class="tb-status" id="dynamicSubtitle">Draft tersimpan otomatis</span>
+            </div>
+          </div>
+
+          <div class="tb-right">
+            <button id="helpBtn" class="btn-icon" title="Pusat Bantuan">
+                <svg viewBox="0 0 24 24" stroke="currentColor" fill="none" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"></circle><path d="M9.09 9a3 3 0 0 1 5.83 1c0 2-3 3-3 3"></path><line x1="12" y1="17" x2="12.01" y2="17"></line></svg>
+            </button>
+            <div class="tb-divider"></div>
+            <button id="btnUndo" class="btn-icon" title="Kembalikan (Undo)" disabled>
+                <svg viewBox="0 0 24 24" stroke="currentColor" fill="none" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><polyline points="9 14 4 9 9 4"></polyline><path d="M20 20v-7a4 4 0 0 0-4-4H4"></path></svg>
+            </button>
+            <button id="btnRedo" class="btn-icon" title="Ulangi (Redo)" disabled>
+                <svg viewBox="0 0 24 24" stroke="currentColor" fill="none" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><polyline points="15 14 20 9 15 4"></polyline><path d="M4 20v-7a4 4 0 0 1 4-4h12"></path></svg>
+            </button>
+            <div class="tb-divider"></div>
+            <button id="darkModeBtn" class="btn-icon" title="Ganti Mode">
+                <svg class="icon-moon" viewBox="0 0 24 24" stroke="currentColor" fill="none" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 12.79A9 9 0 1 1 11.21 3 7 7 0 0 0 21 12.79z"></path></svg>
+                <svg class="icon-sun" viewBox="0 0 24 24" stroke="currentColor" fill="none" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="5"></circle><line x1="12" y1="1" x2="12" y2="3"></line><line x1="12" y1="21" x2="12" y2="23"></line><line x1="4.22" y1="4.22" x2="5.64" y2="5.64"></line><line x1="18.36" y1="18.36" x2="19.78" y2="19.78"></line><line x1="1" y1="12" x2="3" y2="12"></line><line x1="21" y1="12" x2="23" y2="12"></line><line x1="4.22" y1="19.78" x2="5.64" y2="18.36"></line><line x1="18.36" y1="5.64" x2="19.78" y2="4.22"></line></svg>
+            </button>
+            <button class="btn-export" id="exportPdfBtn">📄 Simpan ke PDF</button>
+          </div>
+        </header>
+
+        <div class="editor-layout">
+          <nav class="vertical-rail no-print">
+            <button class="sb-tab active" data-target="sampul">
+                <span class="rail-icon">🎨</span>
+                <span class="rail-text">Sampul</span>
+            </button>
+            <button class="sb-tab" data-target="isi">
+                <span class="rail-icon">📄</span>
+                <span class="rail-text">Isi Buku</span>
+            </button>
+            <button class="sb-tab" data-target="ekspor">
+                <span class="rail-icon">⚙️</span>
+                <span class="rail-text">Ekspor</span>
+            </button>
+          </nav>
+          
+          <aside class="sidebar-stack no-print">
+            <div class="sidebar-box">
+              <div id="panel-sampul" class="sb-panel active">
+                <div class="ui-group"> 
+                  <div class="ui-group-title">Latar Belakang <div class="chevron"><svg viewBox="0 0 24 24"><polyline points="6 9 12 15 18 9"></polyline></svg></div></div>
+                  <div class="form-group full">
+                    <div class="toggle-grid">
+                      <label class="toggle-card radio-card"><input type="radio" name="bgMode" value="theme" checked onchange="window.toggleBgMode()"> Tema</label>
+                      <label class="toggle-card radio-card"><input type="radio" name="bgMode" value="custom" onchange="window.toggleBgMode()"> Gradasi</label>
+                      <label class="toggle-card radio-card"><input type="radio" name="bgMode" value="solid" onchange="window.toggleBgMode()"> Solid</label>
+                    </div>
+                  </div>
+                  <div class="form-group full" id="themeWrapper">
+                    <select id="themeSelect">
+                      <option value="blank">⚪ Tema Putih Bersih</option>
+                      <option value="flower">🌸 Tema Dreamy Flower</option>
+                      <option value="grandprix">🏎️ Tema Grand Prix</option>
+                      <option value="matchday">⚽ Tema Matchday</option>
+                      <option value="space">🚀 Tema Galaxy Space</option>
+                      <option value="urban">🌱 Tema Botanical</option>
+                      <option value="zen">🍵 Tema Warm Zen</option>
+                    </select>
+                  </div>
+                  <div class="form-grid" id="customBgControls" style="display:none;">
+                    <div class="form-group"><label>Warna Atas</label><input type="color" id="bgGrad1" value="#F5F2ED" class="square-picker"></div>
+                    <div class="form-group"><label>Warna Bawah</label><input type="color" id="bgGrad2" value="#D68C73" class="square-picker"></div>
+                  </div>
+                  <div class="form-grid" id="solidBgControls" style="display:none;">
+                    <div class="form-group"><label>Sampul Depan</label><input type="color" id="bgSolidFront" value="#1B4332" class="square-picker"></div>
+                    <div class="form-group"><label>Sampul Belakang</label><input type="color" id="bgSolidBack" value="#1B4332" class="square-picker"></div>
+                  </div>
+                </div>
+
+                <div class="ui-group collapsed">
+                  <div class="ui-group-title">Teks Judul <div class="chevron"><svg viewBox="0 0 24 24"><polyline points="6 9 12 15 18 9"></polyline></svg></div></div>
+                  <div class="form-group full text-control-group">
+                    <label>Judul Depan</label>
+                    <div class="input-color-group" style="margin-bottom:8px;">
+                      <input type="text" id="inputFrontTitle" placeholder="Judul..." maxlength="30">
+                      <input type="color" id="colorFrontTitle" class="inline-color-picker" value="#1B4332">
+                    </div>
+                    <select id="fontTitleFront" style="margin-bottom:8px;"><option value="'Inter', sans-serif">Modern (Inter)</option><option value="'Quicksand', sans-serif">Friendly</option><option value="'Caveat', cursive">Tulisan Tangan</option></select>
+                    <div class="slider-group compact-slider">
+                      <input type="range" id="sizeTitleFront" min="16" max="72" value="28">
+                      <span id="valSizeTitleFront" class="val-indicator">28px</span>
+                    </div>
+                  </div>
+                  <div class="form-group full text-control-group">
+                    <label>Sub-Judul Depan</label>
+                    <div class="input-color-group" style="margin-bottom:8px;">
+                      <input type="text" id="inputFrontSubtitle" placeholder="Motto..." maxlength="80">
+                      <input type="color" id="colorFrontSubtitle" class="inline-color-picker" value="#2D2D2D">
+                    </div>
+                    <select id="fontSubtitleFront" style="margin-bottom:8px;"><option value="'Inter', sans-serif">Modern</option><option value="'Quicksand', sans-serif">Friendly</option></select>
+                    <div class="slider-group compact-slider"><input type="range" id="sizeSubtitleFront" min="10" max="36" value="14"><span id="valSizeSubtitleFront" class="val-indicator">14px</span></div>
+                  </div>
+                  <div class="form-group full text-control-group">
+                    <label>Judul Belakang</label>
+                    <div class="input-color-group" style="margin-bottom:8px;">
+                      <input type="text" id="inputBackTitle" placeholder="Teks..." maxlength="30">
+                      <input type="color" id="colorBackTitle" class="inline-color-picker" value="#1B4332">
+                    </div>
+                    <select id="fontTitleBack" style="margin-bottom:8px;"><option value="'Inter', sans-serif">Modern</option><option value="'Quicksand', sans-serif">Friendly</option></select>
+                    <div class="slider-group compact-slider"><input type="range" id="sizeTitleBack" min="16" max="72" value="24"><span id="valSizeTitleBack" class="val-indicator">24px</span></div>
+                  </div>
+                  <div class="form-group full text-control-group">
+                    <label>Sub-Judul Belakang</label>
+                    <div class="input-color-group" style="margin-bottom:8px;">
+                      <input type="text" id="inputBackSubtitle" placeholder="Teks..." maxlength="80">
+                      <input type="color" id="colorBackSubtitle" class="inline-color-picker" value="#2D2D2D">
+                    </div>
+                    <select id="fontSubtitleBack" style="margin-bottom:8px;"><option value="'Inter', sans-serif">Modern</option></select>
+                    <div class="slider-group compact-slider"><input type="range" id="sizeSubtitleBack" min="10" max="36" value="14"><span id="valSizeSubtitleBack" class="val-indicator">14px</span></div>
+                  </div>
+                </div>
+
+                <div class="ui-group collapsed">
+                  <div class="ui-group-title">Identitas Buku <div class="chevron"><svg viewBox="0 0 24 24"><polyline points="6 9 12 15 18 9"></polyline></svg></div></div>
+                  <div class="form-group full" style="margin-bottom: 12px;">
+                    <label>Warna Kotak Identitas</label>
+                    <div style="display:flex; gap:8px;">
+                      <input type="color" id="colorLabels" class="inline-color-picker" value="#1B4332">
+                      <select id="labelBgMode" onchange="window.toggleLabelBgMode()" style="flex:1;">
+                        <option value="blur">Blur (Kaca)</option>
+                        <option value="transparent" selected>Transparan</option>
+                        <option value="solid">Solid</option>
+                      </select>
+                      <input type="color" id="labelBgColor" class="inline-color-picker" value="#ffffff" style="display:none;">
+                    </div>
+                  </div>
+                  
+                  <div class="form-group full text-control-group">
+                    <label class="switch-row"><span>Tampilkan Baris 1</span><input type="checkbox" class="toggle-switch" id="showId1" checked></label>
+                    <div style="display:flex; gap:8px;"><input type="text" id="labelId1" value="Nama" style="width:35%;"><input type="text" id="valId1" placeholder="Isi..." style="flex:1;"></div>
+                  </div>
+                  <div class="form-group full text-control-group">
+                    <label class="switch-row"><span>Tampilkan Baris 2</span><input type="checkbox" class="toggle-switch" id="showId2" checked></label>
+                    <div style="display:flex; gap:8px;"><input type="text" id="labelId2" value="Kelas" style="width:35%;"><input type="text" id="valId2" placeholder="Isi..." style="flex:1;"></div>
+                  </div>
+                  <div class="form-group full text-control-group">
+                    <label class="switch-row"><span>Tampilkan Baris 3</span><input type="checkbox" class="toggle-switch" id="showId3" checked></label>
+                    <div style="display:flex; gap:8px;"><input type="text" id="labelId3" value="No. Absen" style="width:35%;"><input type="text" id="valId3" placeholder="Isi..." style="flex:1;"></div>
+                  </div>
+                  <div class="form-group full text-control-group">
+                    <label class="switch-row"><span>Tampilkan Baris 4</span><input type="checkbox" class="toggle-switch" id="showId4" checked></label>
+                    <div style="display:flex; gap:8px;"><input type="text" id="labelId4" value="Mapel" style="width:35%;"><input type="text" id="valId4" placeholder="Isi..." style="flex:1;"></div>
+                  </div>
+                  <button type="button" class="btn-danger" id="resetPosBtn" style="margin-top:8px;">🔄 Rapikan Posisi</button>
+                </div>
+                
+                <div class="ui-group collapsed">
+                  <div class="ui-group-title">Stiker & Gambar <div class="chevron"><svg viewBox="0 0 24 24"><polyline points="6 9 12 15 18 9"></polyline></svg></div></div>
+                  <div class="form-group full text-control-group">
+                    <label>Stiker Depan</label>
+                    <div style="display:flex; gap:8px; align-items:center; margin-bottom:8px;">
+                        <label class="file-upload-btn"><input type="file" id="frontImageInput" accept="image/*">📁 Gambar</label>
+                        <input type="checkbox" id="showFrontImage" class="toggle-switch" checked>
+                    </div>
+                    <div class="slider-group compact-slider"><input type="range" id="sizeFrontImage" min="50" max="400" value="150"><span id="valSizeFrontImage" class="val-indicator">150px</span></div>
+                  </div>
+                  <div class="form-group full text-control-group">
+                    <label>Stiker Belakang</label>
+                    <div style="display:flex; gap:8px; align-items:center; margin-bottom:8px;">
+                        <label class="file-upload-btn"><input type="file" id="backImageInput" accept="image/*">📁 Gambar</label>
+                        <input type="checkbox" id="showBackImage" class="toggle-switch" checked>
+                    </div>
+                    <div class="slider-group compact-slider"><input type="range" id="sizeBackImage" min="50" max="400" value="150"><span id="valSizeBackImage" class="val-indicator">150px</span></div>
+                  </div>
+                  <div class="form-group full">
+                    <label>Emoji Depan</label>
+                    <div class="input-color-group">
+                      <div class="input-wrapper"><input type="text" id="inputFrontDeco" value="📝"><button type="button" class="btn-inside" onclick="window.openEmojiPicker('inputFrontDeco', this)">😀</button></div>
+                      <input type="checkbox" class="toggle-switch" id="showCoverDecoFront" checked>
+                    </div>
+                    <div class="slider-group compact-slider"><input type="range" id="sizeDecoFront" min="20" max="150" value="64"><span id="valSizeDecoFront" class="val-indicator">64px</span></div>
+                  </div>
+                  <div class="form-group full">
+                    <label>Emoji Belakang</label>
+                    <div class="input-color-group">
+                      <div class="input-wrapper"><input type="text" id="inputBackDeco" value="📓"><button type="button" class="btn-inside" onclick="window.openEmojiPicker('inputBackDeco', this)">😀</button></div>
+                      <input type="checkbox" class="toggle-switch" id="showCoverDecoBack" checked>
+                    </div>
+                    <div class="slider-group compact-slider"><input type="range" id="sizeDecoBack" min="20" max="150" value="64"><span id="valSizeDecoBack" class="val-indicator">64px</span></div>
+                  </div>
+                </div>
+              </div>
+
+              <div id="panel-isi" class="sb-panel">
+                <div class="ui-group">
+                  <div class="ui-group-title">Format Kertas <div class="chevron"><svg viewBox="0 0 24 24"><polyline points="6 9 12 15 18 9"></polyline></svg></div></div>
+                  <div class="form-group full">
+                    <label class="flex-label">Pola & Warna Garis</label>
+                    <div class="input-color-group">
+                      <select id="lineType" style="flex: 1;">
+                          <option value="kosong">Kosong (Polos)</option>
+                          <option value="kotak">Buku Kotak (Grid)</option>
+                          <option value="cornell">Cornell Notes</option>
+                          <option value="garis">Garis Biasa</option>
+                          <option value="partitur">Partitur Musik</option>
+                          <option value="playbook">Taktik Lapangan</option>
+                          <option value="titik">Titik (Dot Grid)</option>
+                          <option value="checklist">To-Do / Checklist</option>
+                      </select>
+                      <input type="color" id="lineColor" value="#D68C73" class="inline-color-picker">
+                    </div>
+                  </div>
+                </div>
+
+                <div class="ui-group">
+                  <div class="ui-group-title">Setting KDP / A4 <div class="chevron"><svg viewBox="0 0 24 24"><polyline points="6 9 12 15 18 9"></polyline></svg></div></div>
+                  <label class="switch-row" style="margin-bottom: 8px;"><span>Aktifkan Mode KDP</span><input type="checkbox" class="toggle-switch" id="kdpMode"></label>
+                  
+                  <div id="kdpControls" style="display:none; padding-top: 8px; border-top: 1px dashed var(--input-border);">
+                      <div class="form-group full" style="margin-bottom: 8px;">
+                          <label>Ukuran Buku (Inci)</label>
+                          <select id="kdpPreset">
+                              <option value="6x9">6 x 9 Inci (Standar)</option>
+                              <option value="8.5x11">8.5 x 11 Inci (Besar)</option>
+                          </select>
+                      </div>
+                      <div style="display: flex; flex-direction: column; gap: 8px;">
+                          <label class="switch-row"><span>Gunakan Bleed (+0.125")</span><input type="checkbox" class="toggle-switch" id="useBleed" checked></label>
+                          <label class="switch-row"><span>Gunakan Gutter (Margin)</span><input type="checkbox" class="toggle-switch" id="useGutter" checked></label>
+                      </div>
+                  </div>
+                </div>
+                
+                <div class="ui-group collapsed">
+                  <div class="ui-group-title">Header (Bagian Atas) <div class="chevron"><svg viewBox="0 0 24 24"><polyline points="6 9 12 15 18 9"></polyline></svg></div></div>
+                  <label class="switch-row" style="margin-bottom: 8px;"><span>Tampilkan Header</span><input type="checkbox" class="toggle-switch" id="showHeader" checked></label>
+                  
+                  <div class="form-group full text-control-group">
+                      <label class="flex-label">Judul Kiri Atas</label>
+                      <div class="input-color-group">
+                          <input type="text" id="customHeaderText" placeholder="Ketik di sini (Misal: Bab 1)...">
+                          <input type="color" id="headerColor" class="inline-color-picker" value="#1B4332">
+                      </div>
+                  </div>
+                  
+                  <div style="display: flex; flex-direction: column; gap: 8px;">
+                    <label class="switch-row"><span>Garis Pembatas Atas</span><input type="checkbox" class="toggle-switch" id="showTopLine" checked></label>
+                    <label class="switch-row"><span>Tampilkan Tanggal</span><input type="checkbox" class="toggle-switch" id="showDateField" checked></label>
+                    <label class="switch-row"><span>Tampilkan Kolom No.</span><input type="checkbox" class="toggle-switch" id="showNumberField" checked></label>
+                  </div>
+                </div>
+
+                <div class="ui-group collapsed">
+                  <div class="ui-group-title">Footer (Bagian Bawah) <div class="chevron"><svg viewBox="0 0 24 24"><polyline points="6 9 12 15 18 9"></polyline></svg></div></div>
+                  <label class="switch-row" style="margin-bottom: 8px;"><span>Tampilkan Footer</span><input type="checkbox" class="toggle-switch" id="showFooter" checked></label>
+                  
+                  <div class="form-group full" style="margin-bottom: 8px;">
+                    <label>Pilihan Label Bawah</label>
+                    <select id="footerMode">
+                      <option value="nama-absen">Nama + Absen</option>
+                      <option value="nama-kelas">Nama + Kelas</option>
+                      <option value="nama-mapel">Nama + Mapel</option>
+                      <option value="custom">Ketik Sendiri</option>
+                    </select>
+                  </div>
+                  
+                  <div class="form-group full text-control-group">
+                    <label class="flex-label">Teks Bawah Custom</label>
+                    <div class="input-color-group">
+                        <input type="text" id="customFooterText" placeholder="Ketik teks footer...">
+                        <input type="color" id="footerColor" class="inline-color-picker" value="#1B4332">
+                    </div>
+                  </div>
+                  
+                  <div style="display: flex; flex-direction: column; gap: 8px;">
+                    <label class="switch-row"><span>Tampilkan Nomor Hal.</span><input type="checkbox" class="toggle-switch" id="showPageNumber" checked></label>
+                    <label class="switch-row"><span>Tampilkan Dekorasi</span><input type="checkbox" class="toggle-switch" id="showDecoration" checked></label>
+                  </div>
+                </div>
+
+                <div class="ui-group collapsed">
+                  <div class="ui-group-title">Watermark (Tanda Air) <div class="chevron"><svg viewBox="0 0 24 24"><polyline points="6 9 12 15 18 9"></polyline></svg></div></div>
+                  <label class="switch-row"><span>Gunakan Watermark</span><input type="checkbox" class="toggle-switch" id="showWatermark"></label>
+                  <div class="form-group full"><select id="watermarkType"><option value="text">Teks</option><option value="image">Gambar</option></select></div>
+                  <div class="form-group full" id="wmTextGroup"><input type="text" id="watermarkText" placeholder="Ketik watermark..."></div>
+                  <div class="form-group full text-control-group" id="wmImageGroup" style="display:none;">
+                    <label class="file-upload-btn"><input type="file" id="watermarkImageInput" accept="image/*">📁 Gambar</label>
+                    <div class="slider-group compact-slider"><input type="range" id="sizeWatermarkImage" min="50" max="500" value="150"><span id="valSizeWatermark" class="val-indicator">150px</span></div>
+                  </div>
+                </div>
+              </div>
+
+              <div id="panel-ekspor" class="sb-panel">
+                <div class="compact-row" style="display: grid; grid-template-columns: 1fr 1fr; gap: 16px;">
+                  <div class="form-group"><label>Jumlah Hal.</label>
+                    <select id="totalPages"><option value="2" selected>2 Hal</option><option value="4">4 Hal</option><option value="custom">Ketik...</option></select>
+                    <input type="number" id="customTotalPages" style="display:none; margin-top:8px; width:100%;">
+                  </div>
+                  <div class="form-group"><label>Pilihan Unduh</label>
+                    <select id="exportTarget"><option value="semua">Cover + Isi</option><option value="sampul">Sampul Saja</option><option value="isi">Isi Saja</option></select>
+                  </div>
+                </div>
+                <hr style="border:none; border-top: 1px dashed var(--input-border); margin: 8px 0;">
+                <button class="btn-print" id="printBtn">🖨️ Cetak Langsung</button>
+                <button class="btn-secondary" id="btnDownloadDraft" style="margin-top:4px;">⬇️ Simpan File Draft</button>
+                <span class="export-status" id="exportStatus" style="display: none;"></span>
+              </div>
+            </div>
+          </aside>
+
+          <main class="preview-shell">
+            <div class="preview-header">
+              <div class="zoom-controls">
+                  <button id="btnZoomOut" class="zoom-btn"><svg viewBox="0 0 24 24"><line x1="5" y1="12" x2="19" y2="12"></line></svg></button>
+                  <span id="zoomLevelDisplay">90%</span>
+                  <button id="btnZoomIn" class="zoom-btn"><svg viewBox="0 0 24 24"><line x1="12" y1="5" x2="12" y2="19"></line><line x1="5" y1="12" x2="19" y2="12"></line></svg></button>
+              </div>
+              <div class="preview-badge" id="previewBadge">Menampilkan: Sampul</div>
+            </div>
+            
+            <div class="content" id="bookContent">
+              <div id="sec-sampul" class="section active" role="tabpanel">
+                <div class="sheet" id="cover-sheet">
+                  <div class="fold-indicator"></div>
+                  <div id="guide-x" class="snap-guide-x"></div>
+                  <div id="guide-y" class="snap-guide-y"></div>
+                  
+                  <div class="cover-back-half">
+                    <img id="coverBackImage" class="draggable-item" src="" style="display:none; object-fit:contain;" draggable="false">
+                    <div class="draggable-item draggable-text" id="coverBackDeco">📓</div>
+                    <div class="draggable-item draggable-text" id="coverBackTitle">Notes</div>
+                    <div class="draggable-item draggable-text" id="coverBackSubtitle">Selesai</div>
+                  </div>
+                  
+                  <div class="cover-front-half">
+                    <img id="coverFrontImage" class="draggable-item" src="" style="display:none; object-fit:contain;" draggable="false">
+                    <div class="draggable-item draggable-text" id="coverFrontDeco">📝</div>
+                    <div class="draggable-item draggable-text" id="coverFrontTitle">Notebook</div>
+                    <div class="draggable-item draggable-text" id="coverFrontSubtitle">Simple & Clean</div>
+                    <div class="cover-fields draggable-item" id="coverFrontFields">
+                      <div class="cf-row" id="rowId1"><span class="cf-label" id="textLabel1">Nama</span>: <span class="cf-value" id="textVal1"></span></div>
+                      <div class="cf-row" id="rowId2"><span class="cf-label" id="textLabel2">Kelas</span>: <span class="cf-value" id="textVal2"></span></div>
+                      <div class="cf-row" id="rowId3"><span class="cf-label" id="textLabel3">No. Absen</span>: <span class="cf-value" id="textVal3"></span></div>
+                      <div class="cf-row" id="rowId4"><span class="cf-label" id="textLabel4">Mapel</span>: <span class="cf-value" id="textVal4"></span></div>
+                    </div>
+                  </div>
+                </div>
+              </div>
+              <div id="sec-isi" class="section" role="tabpanel"></div>
+              <div id="sec-semua" class="section" role="tabpanel"></div>
+            </div>
+          </main>
+        </div>
+      </div>
+  </div>
+
+  <div id="helpModal" class="modal-overlay">
+      <div class="modal-box">
+          <div class="modal-header"><h2>Bantuan Cetak</h2><button id="closeHelpBtn" class="close-btn">&times;</button></div>
+          <div class="modal-content"><p>Wajib centang <strong>"Background graphics"</strong> agar warna tema ikut tercetak!</p></div>
+      </div>
+  </div>
+
+  <script type="module" src="js/main.js"></script>
+
+  <button id="mobilePreviewToggle" class="floating-preview-btn no-print">
+      <span class="icon">👀</span> <span class="text">Lihat Hasil</span>
+  </button>
+
+  <div id="exportModal" class="modal-overlay" style="z-index: 10000;">
+      <div class="modal-box" style="text-align: center; max-width: 320px; padding: 40px 24px;">
+          <div class="spinner"></div>
+          <h3 style="margin-top: 24px; color: var(--primary);">Memproses PDF...</h3>
+          <p id="exportProgressText" style="color: var(--muted); font-size: 0.9rem; margin-top: 8px;">Menyiapkan dokumen resolusi tinggi, harap tunggu.</p>
+      </div>
+  </div>
+
+</body>
+</html>
