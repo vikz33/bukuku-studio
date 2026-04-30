@@ -399,6 +399,28 @@ input, select, .toggle-card, .btn-icon, .sb-tab, .file-upload-btn, .btn-secondar
 .half-page:first-child .page-number { left: 12mm; }
 .half-page:last-child .page-number { right: 12mm; }
 
+/* =========================================
+   TAMBAHAN FITUR: PLANNER & TRACKER
+   ========================================= */
+.planner-area { flex: 1; display: flex; flex-direction: column; width: 100%; z-index: 1; position: relative; gap: 4mm; }
+.planner-header { font-weight: 800; font-size: 14px; border-bottom: 2px solid var(--rule); padding-bottom: 2mm; outline: none; transition: 0.2s; }
+.planner-header:focus, .day-title:focus, .h-name:focus { background: rgba(214, 140, 115, 0.1); box-shadow: 0 0 0 2px var(--accent); border-radius: 4px; }
+
+/* Weekly Planner Grid */
+.weekly-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 4mm; flex: 1; }
+.day-box { border: 1.5px solid var(--rule); border-radius: 8px; display: flex; flex-direction: column; overflow: hidden; }
+.day-box.full-width { grid-column: 1 / -1; }
+.day-title { background: rgba(0,0,0,0.04); padding: 2mm 4mm; font-weight: 800; font-size: 11px; border-bottom: 1.5px solid var(--rule); outline: none; color: var(--rule); }
+.day-lines { flex: 1; background-image: repeating-linear-gradient(transparent, transparent 6mm, var(--line) 6mm, var(--line) 6.5mm); }
+
+/* Habit Tracker Grid */
+.habit-grid { display: flex; flex-direction: column; gap: 2mm; flex: 1; }
+.h-row { display: flex; align-items: center; gap: 2mm; }
+.h-name { width: 35mm; border-bottom: 1.5px dotted var(--rule); font-size: 10px; font-weight: 700; padding: 1.5mm 0; outline: none; white-space: nowrap; overflow: hidden; color: var(--rule); }
+.h-days { display: flex; flex: 1; justify-content: space-between; gap: 1px; }
+.h-cell { flex: 1; aspect-ratio: 1/1; border: 1px solid var(--line); border-radius: 50%; display: flex; align-items: center; justify-content: center; }
+.h-num { flex: 1; text-align: center; font-size: 6px; font-weight: 800; color: var(--muted); }
+
 /* DRAGGABLE ITEMS & COVER */
 .cover-back-half, .cover-front-half { width: 50%; height: 100%; display: flex; flex-direction: column; align-items: center; justify-content: center; text-align: center; position: relative; padding: 24px; box-sizing: border-box; overflow: hidden;}
 .cover-back-half { background: var(--cover-back); border-right: 1px dashed rgba(0, 0, 0, 0.15); color: var(--text); }

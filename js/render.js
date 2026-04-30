@@ -121,6 +121,43 @@ function getLineContentHTML(t, v) {
     if (t === 'cornell') return `<div class="cornell-area"><div class="cornell-cues">Kata Kunci:</div><div class="cornell-notes">${Array.from({length: 20}, () => '<div class="line-row"></div>').join('')}</div><div class="cornell-summary">Ringkasan:</div></div>`;
     if (t === 'playbook') return `<div class="pitch-area"><div class="pitch-half"></div><div class="pitch-circle"></div><div class="pitch-dot"></div><div class="pitch-box-top"></div><div class="pitch-box-bottom"></div><div class="pitch-goal-top"></div><div class="pitch-goal-bottom"></div><div class="pitch-penalty-top"></div><div class="pitch-penalty-bottom"></div></div>`;
     if (t === 'partitur') return `<div class="music-area">${Array.from({length: 10}, () => `<div class="music-stave">${Array.from({length: 5}, () => '<div class="music-line"></div>').join('')}</div>`).join('')}</div>`;
+    
+    // FITUR BARU: WEEKLY PLANNER
+    if (t === 'weekly') {
+        return `<div class="planner-area">
+            <div class="planner-header" contenteditable="true" spellcheck="false">Target Minggu Ini:</div>
+            <div class="weekly-grid">
+                <div class="day-box"><div class="day-title" contenteditable="true" spellcheck="false">Senin</div><div class="day-lines"></div></div>
+                <div class="day-box"><div class="day-title" contenteditable="true" spellcheck="false">Selasa</div><div class="day-lines"></div></div>
+                <div class="day-box"><div class="day-title" contenteditable="true" spellcheck="false">Rabu</div><div class="day-lines"></div></div>
+                <div class="day-box"><div class="day-title" contenteditable="true" spellcheck="false">Kamis</div><div class="day-lines"></div></div>
+                <div class="day-box"><div class="day-title" contenteditable="true" spellcheck="false">Jumat</div><div class="day-lines"></div></div>
+                <div class="day-box"><div class="day-title" contenteditable="true" spellcheck="false">Sabtu</div><div class="day-lines"></div></div>
+                <div class="day-box full-width"><div class="day-title" contenteditable="true" spellcheck="false">Minggu</div><div class="day-lines"></div></div>
+            </div>
+        </div>`;
+    }
+
+    // FITUR BARU: HABIT TRACKER
+    if (t === 'habit') {
+        let rows = '';
+        // Membuat 15 baris kebiasaan
+        for(let i=0; i<15; i++) {
+            let cells = '';
+            for(let j=1; j<=31; j++) cells += `<div class="h-cell"></div>`;
+            rows += `<div class="h-row"><div class="h-name" contenteditable="true" spellcheck="false">Habit / Kebiasaan ${i+1}</div><div class="h-days">${cells}</div></div>`;
+        }
+        let topNums = `<div class="h-row"><div class="h-name" style="border:none;"></div><div class="h-days">` + Array.from({length:31}, (_,i)=>`<div class="h-num">${i+1}</div>`).join('') + `</div></div>`;
+        
+        return `<div class="planner-area">
+            <div class="planner-header" contenteditable="true" spellcheck="false" style="display:flex; justify-content:space-between;">
+                <span>Bulan: __________________</span>
+                <span>Tahun: _________</span>
+            </div>
+            <div class="habit-grid">${topNums}${rows}</div>
+        </div>`;
+    }
+
     return _linesHTML; 
 }
 
