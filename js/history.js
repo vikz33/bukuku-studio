@@ -82,7 +82,7 @@ export function applyHistoryState(stateStr) {
             $('wmTextGroup').style.display = $('watermarkType').value === 'text' ? 'block' : 'none'; 
             $('wmImageGroup').style.display = $('watermarkType').value === 'image' ? 'block' : 'none'; 
         }
-        if($('kdpControls')) $('kdpControls').style.display = $('kdpMode').checked ? 'block' : 'none';
+        if($('kdpControls')) $('kdpControls').style.display = $('layoutType') && $('layoutType').value === 'kdp' ? 'block' : 'none';
         
         generatePages(false);
     } catch(e) {}

@@ -6,7 +6,7 @@ export async function exportPDF() {
     if (b) b.disabled = true; 
     
     const targetVal = $('exportTarget') ? $('exportTarget').value : 'semua';
-    const isKDP = $('kdpMode') && $('kdpMode').checked;
+    const isKDP = $('layoutType') && $('layoutType').value === 'kdp';
     const t = isKDP ? $('sec-semua') : (targetVal === 'sampul' ? $('sec-sampul') : (targetVal === 'isi' ? $('sec-isi') : $('sec-semua')));
     
     const jsPDFLib = window.jspdf ? window.jspdf.jsPDF : null;

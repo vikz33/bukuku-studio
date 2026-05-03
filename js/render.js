@@ -90,7 +90,7 @@ function calcGrid(v) {
   let dimW = PAPER_A4.w / 2; let dimH = PAPER_A4.h;
   let padX = PAD_LR; let padY = PAD_TB;
   
-  if (v.kdpMode) {
+  if (v.layoutType === 'kdp') {
       const preset = KDP_CONFIG.presets[v.kdpPreset];
       dimW = preset.w; dimH = preset.h;
       if (v.useBleed) { dimW += KDP_CONFIG.bleed; dimH += (KDP_CONFIG.bleed * 2); }
@@ -122,18 +122,21 @@ function getLineContentHTML(t, v) {
     if (t === 'playbook') return `<div class="pitch-area"><div class="pitch-half"></div><div class="pitch-circle"></div><div class="pitch-dot"></div><div class="pitch-box-top"></div><div class="pitch-box-bottom"></div><div class="pitch-goal-top"></div><div class="pitch-goal-bottom"></div><div class="pitch-penalty-top"></div><div class="pitch-penalty-bottom"></div></div>`;
     if (t === 'partitur') return `<div class="music-area">${Array.from({length: 10}, () => `<div class="music-stave">${Array.from({length: 5}, () => '<div class="music-line"></div>').join('')}</div>`).join('')}</div>`;
     
-    // FITUR BARU: WEEKLY PLANNER
+   // FITUR BARU: WEEKLY PLANNER
     if (t === 'weekly') {
+        // Suntikkan 12 baris nyata (div) agar terbaca sempurna saat diekspor
+        const lines = '<div class="day-lines">' + Array.from({length: 5}, () => '<div class="line-row"></div>').join('') + '</div>';
+        
         return `<div class="planner-area">
             <div class="planner-header" contenteditable="true" spellcheck="false">Target Minggu Ini:</div>
             <div class="weekly-grid">
-                <div class="day-box"><div class="day-title" contenteditable="true" spellcheck="false">Senin</div><div class="day-lines"></div></div>
-                <div class="day-box"><div class="day-title" contenteditable="true" spellcheck="false">Selasa</div><div class="day-lines"></div></div>
-                <div class="day-box"><div class="day-title" contenteditable="true" spellcheck="false">Rabu</div><div class="day-lines"></div></div>
-                <div class="day-box"><div class="day-title" contenteditable="true" spellcheck="false">Kamis</div><div class="day-lines"></div></div>
-                <div class="day-box"><div class="day-title" contenteditable="true" spellcheck="false">Jumat</div><div class="day-lines"></div></div>
-                <div class="day-box"><div class="day-title" contenteditable="true" spellcheck="false">Sabtu</div><div class="day-lines"></div></div>
-                <div class="day-box full-width"><div class="day-title" contenteditable="true" spellcheck="false">Minggu</div><div class="day-lines"></div></div>
+                <div class="day-box"><div class="day-title" contenteditable="true" spellcheck="false">Senin</div>${lines}</div>
+                <div class="day-box"><div class="day-title" contenteditable="true" spellcheck="false">Selasa</div>${lines}</div>
+                <div class="day-box"><div class="day-title" contenteditable="true" spellcheck="false">Rabu</div>${lines}</div>
+                <div class="day-box"><div class="day-title" contenteditable="true" spellcheck="false">Kamis</div>${lines}</div>
+                <div class="day-box"><div class="day-title" contenteditable="true" spellcheck="false">Jumat</div>${lines}</div>
+                <div class="day-box"><div class="day-title" contenteditable="true" spellcheck="false">Sabtu</div>${lines}</div>
+                <div class="day-box full-width"><div class="day-title" contenteditable="true" spellcheck="false">Minggu</div>${lines}</div>
             </div>
         </div>`;
     }
@@ -193,7 +196,7 @@ function createHalfPage(p, v, d, isRightPage = true) {
   const footerHTML = v.showFooter ? `<div class="page-footer" style="color:${v.footerColor || '#475569'}; border-top-color:var(--rule);">${getFooterText(v)}</div>` : '';
   
   let padStyle = 'padding: 10mm;'; 
-  if (v.kdpMode) {
+  if (v.layoutType === 'kdp') {
       let M = 8; 
       if (v.useGutter) {
           padStyle = isRightPage ? `padding: ${M}mm ${M}mm ${M}mm calc(${KDP_CONFIG.gutter}mm + ${M}mm);` 
@@ -233,7 +236,7 @@ export function generatePages(saveState = true) {
   let tot = v.totalPages === 'custom' ? (parseInt(v.customTotalPages) || 2) : parseInt(v.totalPages);
   const decos = cfg.decos || ['⭐'];
   
-  if (v.kdpMode) {
+  if (v.layoutType === 'kdp') {
       contentEl.classList.add('is-kdp-mode');
       const preset = KDP_CONFIG.presets[v.kdpPreset];
       let w = preset.w; let h = preset.h;

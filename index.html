@@ -122,7 +122,7 @@
           <aside class="sidebar-stack no-print">
             <div class="sidebar-box">
               <div id="panel-sampul" class="sb-panel active">
-                <div class="ui-group"> 
+                <div class="ui-group collapsed"> 
                   <div class="ui-group-title">Latar Belakang <div class="chevron"><svg viewBox="0 0 24 24"><polyline points="6 9 12 15 18 9"></polyline></svg></div></div>
                   <div class="form-group full">
                     <div class="toggle-grid">
@@ -267,8 +267,34 @@
               </div>
 
               <div id="panel-isi" class="sb-panel">
-                <div class="ui-group">
-                  <div class="ui-group-title">Format Kertas <div class="chevron"><svg viewBox="0 0 24 24"><polyline points="6 9 12 15 18 9"></polyline></svg></div></div>
+                <div class="ui-group collapsed">
+                  <div class="ui-group-title">Format Kertas & Layout <div class="chevron"><svg viewBox="0 0 24 24"><polyline points="6 9 12 15 18 9"></polyline></svg></div></div>
+                  
+                  <!-- 1. DROPDOWN JENIS LAYOUT -->
+                  <div class="form-group full" style="margin-bottom: 12px;">
+                    <label>Jenis Layout</label>
+                    <select id="layoutType">
+                      <option value="a4" selected>Standar Indonesia (A4)</option>
+                      <option value="kdp">Standar Amerika (KDP / Print on Demand)</option>
+                    </select>
+                  </div>
+
+                  <!-- 2. SETTING KDP (Disembunyikan saat A4 dipilih) -->
+                  <div id="kdpControls" style="display:none; padding-bottom: 12px; border-bottom: 1px dashed var(--input-border); margin-bottom: 12px;">
+                      <div class="form-group full" style="margin-bottom: 8px;">
+                          <label>Ukuran Buku (Inci)</label>
+                          <select id="kdpPreset">
+                              <option value="6x9">6 x 9 Inci (Standar)</option>
+                              <option value="8.5x11">8.5 x 11 Inci (Besar)</option>
+                          </select>
+                      </div>
+                      <div style="display: flex; flex-direction: column; gap: 8px;">
+                          <label class="switch-row"><span>Gunakan Bleed (+0.125")</span><input type="checkbox" class="toggle-switch" id="useBleed" checked></label>
+                          <label class="switch-row"><span>Gunakan Gutter (Margin)</span><input type="checkbox" class="toggle-switch" id="useGutter" checked></label>
+                      </div>
+                  </div>
+
+                  <!-- 3. POLA & WARNA GARIS -->
                   <div class="form-group full">
                     <label class="flex-label">Pola & Warna Garis</label>
                     <div class="input-color-group">
@@ -286,25 +312,6 @@
                       </select>
                       <input type="color" id="lineColor" value="#D68C73" class="inline-color-picker">
                     </div>
-                  </div>
-                </div>
-
-                <div class="ui-group">
-                  <div class="ui-group-title">Setting KDP / A4 <div class="chevron"><svg viewBox="0 0 24 24"><polyline points="6 9 12 15 18 9"></polyline></svg></div></div>
-                  <label class="switch-row" style="margin-bottom: 8px;"><span>Aktifkan Mode KDP</span><input type="checkbox" class="toggle-switch" id="kdpMode"></label>
-                  
-                  <div id="kdpControls" style="display:none; padding-top: 8px; border-top: 1px dashed var(--input-border);">
-                      <div class="form-group full" style="margin-bottom: 8px;">
-                          <label>Ukuran Buku (Inci)</label>
-                          <select id="kdpPreset">
-                              <option value="6x9">6 x 9 Inci (Standar)</option>
-                              <option value="8.5x11">8.5 x 11 Inci (Besar)</option>
-                          </select>
-                      </div>
-                      <div style="display: flex; flex-direction: column; gap: 8px;">
-                          <label class="switch-row"><span>Gunakan Bleed (+0.125")</span><input type="checkbox" class="toggle-switch" id="useBleed" checked></label>
-                          <label class="switch-row"><span>Gunakan Gutter (Margin)</span><input type="checkbox" class="toggle-switch" id="useGutter" checked></label>
-                      </div>
                   </div>
                 </div>
                 

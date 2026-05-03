@@ -147,9 +147,10 @@ function initApp() {
       });
   });
 
-  if($('kdpMode')) $('kdpMode').addEventListener('change', (e) => {
-      if($('kdpControls')) $('kdpControls').style.display = e.target.checked ? 'block' : 'none';
-      if(e.target.checked && $('exportTarget')) $('exportTarget').value = 'semua';
+  if($('layoutType')) $('layoutType').addEventListener('change', (e) => {
+      const isKDP = e.target.value === 'kdp';
+      if($('kdpControls')) $('kdpControls').style.display = $('layoutType') && $('layoutType').value === 'kdp' ? 'block' : 'none';
+      if(isKDP && $('exportTarget')) $('exportTarget').value = 'semua';
       generatePages(true);
   });
 
