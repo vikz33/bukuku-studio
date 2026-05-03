@@ -37,6 +37,7 @@ export function pushHistory() {
     }
 
     const stateStr = JSON.stringify(stateObj); 
+    localStorage.setItem('bukuku_autosave', stateStr);
     const arr = historyState[state.currentTab]; 
     const idx = historyIndex[state.currentTab];
     

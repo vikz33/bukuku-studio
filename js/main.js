@@ -304,6 +304,44 @@ function initApp() {
     });
   });
 
+// ==========================================
+  // FITUR: AUTO-LOAD DARI LOCAL STORAGE
+  // ==========================================
+  try {
+      const savedDraft = localStorage.getItem('bukuku_autosave');
+      if (savedDraft) {
+          const data = JSON.parse(savedDraft);
+          if(data.pos) state.POSITIONS = data.pos;
+          if(data.img) { 
+              if(data.img.f !== undefined) state.frontImageBase64 = data.img.f; 
+              if(data.img.b !== undefined) state.backImageBase64 = data.img.b; 
+              if(data.img.w !== undefined) state.watermarkImageBase64 = data.img.w; 
+          }
+          if(data.vals) {
+              Object.keys(data.vals).forEach(id => {
+                  if(id === 'bgMode') { 
+                      const rb = document.querySelector(`input[name="bgMode"][value="${data.vals.bgMode}"]`); 
+                      if(rb) rb.checked = true;
+                  } else { 
+                      let el = $(id); 
+                      if(el) { if(el.type === 'checkbox') el.checked = data.vals[id]; else el.value = data.vals[id]; } 
+                  }
+              });
+              if(data.vals.totalPages && $('customTotalPages')) $('customTotalPages').style.display = data.vals.totalPages === 'custom' ? 'block' : 'none';
+              if($('watermarkType')) { 
+                  if($('wmTextGroup')) $('wmTextGroup').style.display = $('watermarkType').value === 'text' ? 'block' : 'none'; 
+                  if($('wmImageGroup')) $('wmImageGroup').style.display = $('watermarkType').value === 'image' ? 'block' : 'none'; 
+              }
+          }
+          if(typeof window.toggleBgMode === 'function') window.toggleBgMode(); 
+          if(typeof window.toggleLabelBgMode === 'function') window.toggleLabelBgMode();
+          if($('kdpControls')) $('kdpControls').style.display = $('layoutType') && $('layoutType').value === 'kdp' ? 'block' : 'none';
+      }
+  } catch (err) {
+      console.warn("Auto-save kosong atau korup.");
+  }
+  // ==========================================
+
   generatePages(false); 
   state.isAppReady = true; 
   pushHistory();
